@@ -18,8 +18,7 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private Set<Employee> employees;
     // TODO: нужно ли связывать аннотацией с базей?
-    @OneToOne
-    @Column
+
     private Department headDepartment;
 
     public Department() {

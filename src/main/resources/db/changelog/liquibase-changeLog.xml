@@ -37,6 +37,6 @@
             <column name="fired_date" type="date"/>
             <column name="job_title" type="varchar"/>
             <column name="salary" type="integer"/>
-            <column name="isBoss" type="boolean"
+            <column name="isBoss" type="boolean"/>
         </createTable>
     </changeSet>
