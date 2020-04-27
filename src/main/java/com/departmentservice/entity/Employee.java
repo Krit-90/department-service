@@ -26,7 +26,7 @@ public class Employee {
     private String phone;
     @Column
     private String email;
-    // TODO: Нуэна ли генерация даты создания или устройства на работу
+    // TODO: Нужна ли генерация даты создания или устройства на работу
     @Column(name = "Employment_Date")
     private Date employmentDate;
     @Column(name = "Fired_Date")
