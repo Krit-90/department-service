@@ -8,23 +8,21 @@ import java.util.Set;
 @Entity
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     @Column
     private String title;
     @Temporal(TemporalType.DATE)
-    @Column (name = "Сreation_date")
+    @Column
     private Date creationDate;
-    @OneToMany(mappedBy = "Departments")
+    @OneToMany(mappedBy = "department")
     private Set<Employee> employees;
+    // TODO: нужно ли связывать аннотацией с базей?
+    @OneToOne
     @Column
     private Department headDepartment;
 
     public Department() {
-    }
-
-    public Department(Department headDepartment) {
-        this.headDepartment = headDepartment;
     }
 
     public Department(String title) {

@@ -7,27 +7,31 @@ import java.util.Date;
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     @Column
-    private String lastname;
+    private String lastName;
     @Column
-    private String firsname;
+    private String firstName;
     @Column
     private String patronymic;
+    // TODO: Удобно ли булево использовать или enum?
+    @Enumerated(EnumType.STRING)
     @Column
-    private Boolean isMale;
+    private  Sex gender;
     @Temporal(TemporalType.DATE)
-    @Column(name = "Birth_Date")
+    @Column
     private Date birthDate;
     @Column
     private String phone;
     @Column
     private String email;
+    // TODO: Нуэна ли генерация даты создания или устройства на работу
     @Column(name = "Employment_Date")
     private Date employmentDate;
     @Column(name = "Fired_Date")
     private Date firedDate;
+    @Enumerated(EnumType.STRING)
     @Column
     private JobTitlesEnum jobTitle;
     @Column
@@ -41,27 +45,27 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String lastname, String firsname, String patronymic, Boolean isMale) {
-        this.lastname = lastname;
-        this.firsname = firsname;
+    public Employee(String lastName, String firstName, String patronymic, Sex gender) {
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.patronymic = patronymic;
-        this.isMale = isMale;
+        this.gender = gender;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getFirsname() {
-        return firsname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirsname(String firsname) {
-        this.firsname = firsname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getPatronymic() {
@@ -72,12 +76,12 @@ public class Employee {
         this.patronymic = patronymic;
     }
 
-    public Boolean getMale() {
-        return isMale;
+    public Sex getGender() {
+        return gender;
     }
 
-    public void setMale(Boolean male) {
-        isMale = male;
+    public void setGender(Sex gender) {
+        this.gender = gender;
     }
 
     public Date getBirthDate() {
@@ -159,14 +163,14 @@ public class Employee {
 
         Employee employee = (Employee) o;
 
-        if (id != null ? !id.equals(employee.id) : employee.id != null) return false;
-        if (getLastname() != null ? !getLastname().equals(employee.getLastname()) : employee.getLastname() != null)
+        if (!id.equals(employee.id)) return false;
+        if (getLastName() != null ? !getLastName().equals(employee.getLastName()) : employee.getLastName() != null)
             return false;
-        if (getFirsname() != null ? !getFirsname().equals(employee.getFirsname()) : employee.getFirsname() != null)
+        if (getFirstName() != null ? !getFirstName().equals(employee.getFirstName()) : employee.getFirstName() != null)
             return false;
         if (getPatronymic() != null ? !getPatronymic().equals(employee.getPatronymic()) : employee.getPatronymic() != null)
             return false;
-        if (isMale != null ? !isMale.equals(employee.isMale) : employee.isMale != null) return false;
+        if (getGender() != employee.getGender()) return false;
         if (getBirthDate() != null ? !getBirthDate().equals(employee.getBirthDate()) : employee.getBirthDate() != null)
             return false;
         if (getPhone() != null ? !getPhone().equals(employee.getPhone()) : employee.getPhone() != null) return false;
@@ -184,11 +188,11 @@ public class Employee {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (getLastname() != null ? getLastname().hashCode() : 0);
-        result = 31 * result + (getFirsname() != null ? getFirsname().hashCode() : 0);
+        int result = id.hashCode();
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
         result = 31 * result + (getPatronymic() != null ? getPatronymic().hashCode() : 0);
-        result = 31 * result + (isMale != null ? isMale.hashCode() : 0);
+        result = 31 * result + (getGender() != null ? getGender().hashCode() : 0);
         result = 31 * result + (getBirthDate() != null ? getBirthDate().hashCode() : 0);
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
         result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);

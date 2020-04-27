@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+    <changeSet id="GAbdulaev-1" author="GAbdulaev">
+        <createTable tableName="Departments">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar"/>
+            <column name="creation_date" type="date"/>
+            <column name="head_department_id" type="bigint">
+                <constraints foreignKeyName="head_department_id"
+                             referencedTableName="Departments"
+                             referencedColumnNames="id"
+                />
+            </column>
+        </createTable>
+        <createTable tableName="Employees">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar"/>
+            <column name="first_name" type="varchar"/>
+            <column name="patronymic" type="varchar"/>
+            <column name="gender" type="varchar"/>
+            <column name="birth_date" type="date"/>
+            <column name="phone" type="varchar"/>
+            <column name="email" type="varchar"/>
+            <column name="employment_date" type="date"/>
+            <column name="fired_date" type="date"/>
+            <column name="job_title" type="varchar"/>
+            <column name="salary" type="integer"/>
+            <column name="isBoss" type="boolean"
+        </createTable>
+    </changeSet>
