@@ -1,19 +1,25 @@
-package com.departmentservice.service;
+package com.departmentservice.service.impl;
 
 import com.departmentservice.dto.DepartmentDto;
 import com.departmentservice.entity.Department;
 import com.departmentservice.entity.Employee;
 import com.departmentservice.repository.DepartamentRepository;
+import com.departmentservice.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
+    private final DepartamentRepository departamentRepository;
+
     @Autowired
-    private DepartamentRepository departamentRepository;
+    public DepartmentServiceImpl(DepartamentRepository departamentRepository) {
+        this.departamentRepository = departamentRepository;
+    }
 
     @Override
     public void addDepartment(Department department, String title) {
@@ -26,37 +32,39 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto getDepartmentInfoByTitle(String title) {
+    public DepartmentDto getDepartmentInfoById(Long id) {
         return null;
     }
 
     @Override
-    public List<DepartmentDto> getSubordinateDepartments(String title) {
+    public List<DepartmentDto> getSubordinateDepartments(Long id) {
         return null;
     }
 
     @Override
-    public List<DepartmentDto> getAllSubordinateDepartments(String title) {
+    public List<DepartmentDto> getAllSubordinateDepartments(Long id) {
         return null;
     }
 
     @Override
-    public void changeHeadDepartment(String current, String newHead) {
+    public void changeHeadDepartment(Long idCurrent, Long idNewHead) {
 
     }
 
     @Override
-    public List<DepartmentDto> getAllHigherDepartments(String title) {
+    public List<DepartmentDto> getAllHigherDepartments(Long id) {
         return null;
     }
 
     @Override
-    public Integer sumOfSalary(String title) {
+    public BigDecimal getSumOfSalary(Long id) {
         return null;
     }
 
     @Override
-    public List<Employee> employeesOfDepartment(String title) {
+    public List<Employee> getEmployeesOfDepartment(Long id) {
         return null;
     }
+
+
 }

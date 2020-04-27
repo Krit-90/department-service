@@ -9,11 +9,13 @@
     http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
 
     <changeSet id="GAbdulaev-1" author="GAbdulaev">
-        <createTable tableName="Departments">
+        <createTable tableName="departments">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="title" type="varchar"/>
+            <column name="title" type="varchar">
+                <constraints unique="true"/>
+            </column>
             <column name="creation_date" type="date"/>
             <column name="head_department_id" type="bigint">
                 <constraints foreignKeyName="head_department_id"
@@ -22,7 +24,7 @@
                 />
             </column>
         </createTable>
-        <createTable tableName="Employees">
+        <createTable tableName="employees">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -40,3 +42,4 @@
             <column name="isBoss" type="boolean"/>
         </createTable>
     </changeSet>
+</databaseChangeLog>

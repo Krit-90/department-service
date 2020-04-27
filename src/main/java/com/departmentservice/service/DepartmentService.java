@@ -4,6 +4,7 @@ import com.departmentservice.dto.DepartmentDto;
 import com.departmentservice.entity.Department;
 import com.departmentservice.entity.Employee;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface DepartmentService {
@@ -27,53 +28,53 @@ public interface DepartmentService {
     /**
      * Получение информации о департаменте
      *
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Дто департамента, содержащий иформацию
      */
-    DepartmentDto getDepartmentInfoByTitle(String title);
+    DepartmentDto getDepartmentInfoById(Long id);
 
     /**
      * Получение информации о департаментах, находящихся в непосредственном подчинении искомого департамента
      *
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getSubordinateDepartments(String title);
+    List<DepartmentDto> getSubordinateDepartments(Long id);
 
     /**
      * Получение информации о ВСЕХ департаментах, находящихся в подчинении искомого департамента
      *
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getAllSubordinateDepartments(String title);
+    List<DepartmentDto> getAllSubordinateDepartments(Long id);
 
     /**
      * Смена вышестоящего департамента
-     * @param current Название искомого департамента
-     * @param newHead Название нового департамента
+     * @param idCurrent Id искомого департамента
+     * @param idNewHead Id нового департамента
      */
 
-    void changeHeadDepartment(String current, String newHead);
+    void changeHeadDepartment(Long idCurrent, Long idNewHead);
 
     /**
      * Получение информации о всех вышестоящих департаментах
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getAllHigherDepartments(String title);
+    List<DepartmentDto> getAllHigherDepartments(Long id);
 
     /**
      * Получение суммы зарплат работников искомого департамента
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Сумма зарплат
      */
-    Integer sumOfSalary(String title);
+    BigDecimal getSumOfSalary(Long id);
 
     /**
      * Получение списка работников искомого департамента
-     * @param title Название искомого департамента
+     * @param id Id искомого департамента
      * @return Список работников
      */
-    List<Employee> employeesOfDepartment(String title);
+    List<Employee> getEmployeesOfDepartment(Long id);
 }

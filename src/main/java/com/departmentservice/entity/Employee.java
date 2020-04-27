@@ -1,9 +1,9 @@
 package com.departmentservice.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Table(name = "Employees")
+@Table(name = "employees")
 @Entity
 public class Employee {
     @Id
@@ -15,25 +15,24 @@ public class Employee {
     private String firstName;
     @Column
     private String patronymic;
-    // TODO: Удобно ли булево использовать или enum?
     @Enumerated(EnumType.STRING)
     @Column
     private  Sex gender;
     @Temporal(TemporalType.DATE)
     @Column
-    private Date birthDate;
+    private LocalDateTime birthDate;
     @Column
     private String phone;
     @Column
     private String email;
-    // TODO: Нуэна ли генерация даты создания или устройства на работу
-    @Column(name = "Employment_Date")
-    private Date employmentDate;
-    @Column(name = "Fired_Date")
-    private Date firedDate;
+    // TODO: Нужна ли генерация даты создания или устройства на работу
+    @Column(name = "employment_date")
+    private LocalDateTime employmentDate;
+    @Column(name = "fired_Date")
+    private LocalDateTime firedDate;
     @Enumerated(EnumType.STRING)
     @Column
-    private JobTitlesEnum jobTitle;
+    private JobTitles jobTitle;
     @Column
     private Integer salary;
     @Column
@@ -84,11 +83,11 @@ public class Employee {
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -108,27 +107,27 @@ public class Employee {
         this.email = email;
     }
 
-    public Date getEmploymentDate() {
+    public LocalDateTime getEmploymentDate() {
         return employmentDate;
     }
 
-    public void setEmploymentDate(Date employmentDate) {
+    public void setEmploymentDate(LocalDateTime employmentDate) {
         this.employmentDate = employmentDate;
     }
 
-    public Date getFiredDate() {
+    public LocalDateTime getFiredDate() {
         return firedDate;
     }
 
-    public void setFiredDate(Date firedDate) {
+    public void setFiredDate(LocalDateTime firedDate) {
         this.firedDate = firedDate;
     }
 
-    public JobTitlesEnum getJobTitle() {
+    public JobTitles getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(JobTitlesEnum jobTitle) {
+    public void setJobTitle(JobTitles jobTitle) {
         this.jobTitle = jobTitle;
     }
 

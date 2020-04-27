@@ -1,10 +1,11 @@
 package com.departmentservice.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
-@Table(name = "Departments")
+@Table(name = "departments")
 @Entity
 public class Department {
     @Id
@@ -14,11 +15,11 @@ public class Department {
     private String title;
     @Temporal(TemporalType.DATE)
     @Column
-    private Date creationDate;
+    private LocalDateTime creationDate;
     @OneToMany(mappedBy = "department")
     private Set<Employee> employees;
-    // TODO: нужно ли связывать аннотацией с базей?
-
+    @ManyToOne
+    @JoinColumn()
     private Department headDepartment;
 
     public Department() {
@@ -38,11 +39,11 @@ public class Department {
         this.title = title;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
