@@ -1,8 +1,8 @@
 package com.departmentservice.service;
 
 import com.departmentservice.dto.DepartmentDto;
+import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Department;
-import com.departmentservice.entity.Employee;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,16 +14,24 @@ public interface DepartmentService {
      *
      * @param department Добавляемый департамент
      * @param title Название вышестоящего департамента
+     * @return Добавленный департамент
      */
-    void addDepartment(Department department, String title);
+    Department addDepartment(Department department, String title);
 
     /**
      * Обновление названия департамента
      *
      * @param after Старое название
-     * @param before  Новое название
+     * @param id  Id искомого департамента
+     * @return Измененный департамент
      */
-    void updateDepartmentTitle(String after, String before);
+    Department updateDepartmentTitle(String after, Long id);
+
+    /**
+     * Удаление департамента
+     * @param id Id искомого департамента
+     */
+    void removeDepartment(Long id);
 
     /**
      * Получение информации о департаменте
@@ -53,9 +61,10 @@ public interface DepartmentService {
      * Смена вышестоящего департамента
      * @param idCurrent Id искомого департамента
      * @param idNewHead Id нового департамента
+     * @return Измененный департамент
      */
 
-    void changeHeadDepartment(Long idCurrent, Long idNewHead);
+    Department changeHeadDepartment(Long idCurrent, Long idNewHead);
 
     /**
      * Получение информации о всех вышестоящих департаментах
@@ -63,6 +72,13 @@ public interface DepartmentService {
      * @return Список дто департаментов
      */
     List<DepartmentDto> getAllHigherDepartments(Long id);
+
+    /**
+     * Получение департамента по названию
+     * @param title Название искомого департамента
+     * @return Искомый департамент
+     */
+    Department getDepartmentByTitle(String title);
 
     /**
      * Получение суммы зарплат работников искомого департамента
@@ -76,5 +92,12 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Список работников
      */
-    List<Employee> getEmployeesOfDepartment(Long id);
+    List<EmployeeDto> getEmployeesOfDepartment(Long id);
+
+    /**
+     * Метод маппинга департамента в объект с неодходимой информацией
+     * @param department Искомый департамент
+     * @return DepartmentDto - объект с открытой информацией
+     */
+    DepartmentDto mapDepartmentToDepartmentDto(Department department);
 }

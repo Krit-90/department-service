@@ -1,26 +1,27 @@
 package com.departmentservice.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Table(name = "departments")
 @Entity
 public class Department {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String title;
-    @Temporal(TemporalType.DATE)
     @Column
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
     @OneToMany(mappedBy = "department")
     private Set<Employee> employees;
+    @OneToMany(mappedBy = "headDepartment")
+    private Set<Department> subDepartment;
     @ManyToOne
-    @JoinColumn()
+    @JoinColumn(name = "head_department_id")
     private Department headDepartment;
+
 
     public Department() {
     }
@@ -30,6 +31,13 @@ public class Department {
     }
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -39,11 +47,11 @@ public class Department {
         this.title = title;
     }
 
-    public LocalDateTime getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -61,6 +69,14 @@ public class Department {
 
     public void setHeadDepartment(Department headDepartment) {
         this.headDepartment = headDepartment;
+    }
+
+    public Set<Department> getSubDepartment() {
+        return subDepartment;
+    }
+
+    public void setSubDepartment(Set<Department> subDepartment) {
+        this.subDepartment = subDepartment;
     }
 
     @Override
