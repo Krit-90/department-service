@@ -1,8 +1,7 @@
 package com.departmentservice.dto;
 
-import com.departmentservice.entity.JobTitles;
+import com.departmentservice.entity.JobTitle;
 import com.departmentservice.entity.Sex;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -16,16 +15,16 @@ public class EmployeeDto {
     private String email;
     private LocalDate employmentDate;
     private LocalDate firedDate;
-    private JobTitles jobTitle;
+    private JobTitle jobTitle;
     private BigDecimal salary;
     private Boolean isBoss;
-    private DepartmentDto department;
+    private String departmentTitle;
 
     public EmployeeDto() {
     }
 
     public EmployeeDto(String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
-                       String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitles jobTitle,
+                       String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitle jobTitle,
                        BigDecimal salary, Boolean isBoss, DepartmentDto department) {
         this.lastName = lastName;
         this.firstName = firstName;
@@ -39,7 +38,6 @@ public class EmployeeDto {
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.isBoss = isBoss;
-        this.department = department;
     }
 
     public String getLastName() {
@@ -114,11 +112,11 @@ public class EmployeeDto {
         this.firedDate = firedDate;
     }
 
-    public JobTitles getJobTitle() {
+    public JobTitle getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(JobTitles jobTitle) {
+    public void setJobTitle(JobTitle jobTitle) {
         this.jobTitle = jobTitle;
     }
 
@@ -138,12 +136,12 @@ public class EmployeeDto {
         isBoss = boss;
     }
 
-    public DepartmentDto getDepartment() {
-        return department;
+    public String getDepartment() {
+        return departmentTitle;
     }
 
-    public void setDepartment(DepartmentDto department) {
-        this.department = department;
+    public void setDepartment(String departmentTitle) {
+        this.departmentTitle = departmentTitle;
     }
 
     @Override
@@ -161,7 +159,7 @@ public class EmployeeDto {
         sb.append(", jobTitle=").append(jobTitle);
         sb.append(", salary=").append(salary);
         sb.append(", isBoss=").append(isBoss);
-        sb.append(", department=").append(department);
+        sb.append(", department=").append(departmentTitle);
         sb.append('}');
         return sb.toString();
     }

@@ -19,6 +19,10 @@ public class DepartmentDto {
         this.countEmployee = countEmployee;
     }
 
+    public DepartmentDto(String title) {
+        this.title = title;
+    }
+
     public String getTitle() {
         return title;
     }

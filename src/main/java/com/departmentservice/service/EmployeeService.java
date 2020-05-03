@@ -2,7 +2,6 @@ package com.departmentservice.service;
 
 import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Employee;
-import com.departmentservice.entity.Sex;
 
 import java.time.LocalDate;
 import java.util.List;
