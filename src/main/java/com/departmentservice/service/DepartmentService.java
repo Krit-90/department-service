@@ -21,11 +21,11 @@ public interface DepartmentService {
     /**
      * Обновление названия департамента
      *
-     * @param after Старое название
+     * @param newTitle Старое название
      * @param id  Id искомого департамента
      * @return Измененный департамент
      */
-    Department updateDepartmentTitle(String after, Long id);
+    Department updateDepartmentTitle(String newTitle, Long id);
 
     /**
      * Удаление департамента
@@ -99,5 +99,5 @@ public interface DepartmentService {
      * @param department Искомый департамент
      * @return DepartmentDto - объект с открытой информацией
      */
-    DepartmentDto mapDepartmentToDepartmentDto(Department department);
+    DepartmentDto enrichDepartmentDto(Department department);
 }

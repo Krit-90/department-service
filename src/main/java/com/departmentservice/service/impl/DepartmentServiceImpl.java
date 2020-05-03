@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,51 +36,47 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department addDepartment(Department department, String title) {
-        department.setHeadDepartment(departmentRepository.findDepartmentByTitle(title));
+        department.setCreationDate(LocalDate.now());
+        department.setHeadDepartment(departmentRepository.findByTitle(title));
         departmentRepository.save(department);
         return department;
     }
 
     @Override
-    public Department updateDepartmentTitle(String after, Long id) {
-        if (isPresent(id)) {
-            departmentRepository.updateTitle(after, id);
-        }
-        return departmentRepository.findById(id).get();
+    public Department updateDepartmentTitle(String newTitle, Long id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        department.setTitle(newTitle);
+        return departmentRepository.save(department);
     }
 
     @Override
     public void removeDepartment(Long id) {
-        if(isPresent(id)){
-            departmentRepository.deleteById(id);
-        }
+        departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        departmentRepository.deleteById(id);
     }
 
     @Override
     public DepartmentDto getDepartmentInfoById(Long id) {
-        if (isPresent(id)) {
-            return mapDepartmentToDepartmentDto(departmentRepository.findById(id).get());
-        }
-        return null;
+        return enrichDepartmentDto(departmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Департамент не найден")));
     }
 
     private boolean isPresent(Long id) {
         if (departmentRepository.findById(id).isPresent()) {
             return true;
         } else {
-            throw new NoSuchElementException("Данный департамент не нейден");
+            throw new NoSuchElementException("Данный департамент не найден");
         }
     }
 
     @Override
     public List<DepartmentDto> getSubordinateDepartments(Long id) {
-        if (isPresent(id)) {
-            List<DepartmentDto> departmentsDtoList = new ArrayList();
-            departmentRepository.getSubDepartments(id).
-                    forEach(department -> departmentsDtoList.add(mapDepartmentToDepartmentDto(department)));
-            return departmentsDtoList;
-        }
-        return null;
+        departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        List<DepartmentDto> departmentsDtoList = new ArrayList();
+        departmentRepository.findByHeadDepartmentId(id).
+                forEach(department -> departmentsDtoList.add(enrichDepartmentDto(department)));
+        return departmentsDtoList;
     }
 
     @Override
@@ -87,18 +84,18 @@ public class DepartmentServiceImpl implements DepartmentService {
         return null;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public Department changeHeadDepartment(Long idCurrent, Long idNewHead) {
-        if (isPresent(idCurrent) & isPresent(idNewHead)) {
-            departmentRepository.changeHeadDepartment(idCurrent, idNewHead);
-            return departmentRepository.findById(idCurrent).get();
-        }
-        return null;
+        departmentRepository.findById(idCurrent).orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        departmentRepository.findById(idNewHead).orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        departmentRepository.changeHeadDepartment(idCurrent, idNewHead);
+        return departmentRepository.findById(idCurrent).get();
     }
 
     @Override
     public Department getDepartmentByTitle(String title) {
-        return departmentRepository.findDepartmentByTitle(title);
+        return departmentRepository.findByTitle(title);
     }
 
     @Override
@@ -108,24 +105,23 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public BigDecimal getSumOfSalary(Long id) {
-        if (isPresent(id)) {
-            return employeeRepository.getSumOfSalaryInDepartment(id);
-        }
-        return null;
+        departmentRepository.findById(id).orElseThrow();
+        return employeeRepository.getSumOfSalaryInDepartment(id);
     }
 
     @Override
     public List<EmployeeDto> getEmployeesOfDepartment(Long id) {
-        if (isPresent(id)) {
-            List<EmployeeDto> employeesDtoList = new ArrayList();
-            employeeRepository.getEmployeesFromDepartment(id).
-                    forEach(employee -> employeesDtoList.add(mapperEntity.employeeToDto(employee)));
-        }
-        return null;
+        departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+        List<EmployeeDto> employeesDtoList = new ArrayList();
+        employeeRepository.findByDepartmentId(id).
+                forEach(employee -> employeesDtoList.add(mapperEntity.employeeToDto(employee)));
+        return employeesDtoList;
     }
 
+    //TODO: Если делать приватным, то его нужно прописывать в интерфейсе, еще и как то автоварить маппер и репозиторий
+    // или как то по другому
     @Override
-    public DepartmentDto mapDepartmentToDepartmentDto(Department department) {
+    public DepartmentDto enrichDepartmentDto(Department department) {
         DepartmentDto departmentDto = mapperEntity.departmentToDto(department);
         departmentDto.setBoss(mapperEntity.employeeToDto(employeeRepository.getBoss(department.getId())));
         departmentDto.setCountEmployee(employeeRepository.getCountOfEmployeesInDepartment(department.getId()));

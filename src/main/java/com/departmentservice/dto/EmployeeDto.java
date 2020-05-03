@@ -1,6 +1,6 @@
 package com.departmentservice.dto;
 
-import com.departmentservice.entity.JobTitles;
+import com.departmentservice.entity.JobTitle;
 import com.departmentservice.entity.Sex;
 
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ public class EmployeeDto {
     private String email;
     private LocalDate employmentDate;
     private LocalDate firedDate;
-    private JobTitles jobTitle;
+    private JobTitle jobTitle;
     private BigDecimal salary;
     private Boolean isBoss;
     private DepartmentDto department;
@@ -25,7 +25,7 @@ public class EmployeeDto {
     }
 
     public EmployeeDto(String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
-                       String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitles jobTitle,
+                       String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitle jobTitle,
                        BigDecimal salary, Boolean isBoss, DepartmentDto department) {
         this.lastName = lastName;
         this.firstName = firstName;
@@ -114,11 +114,11 @@ public class EmployeeDto {
         this.firedDate = firedDate;
     }
 
-    public JobTitles getJobTitle() {
+    public JobTitle getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(JobTitles jobTitle) {
+    public void setJobTitle(JobTitle jobTitle) {
         this.jobTitle = jobTitle;
     }
 

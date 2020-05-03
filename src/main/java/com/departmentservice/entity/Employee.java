@@ -1,21 +1,28 @@
 package com.departmentservice.entity;
 
+import com.departmentservice.util.EmployeeDateCheck;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 
+// TODO: Не реагирует на это ограничение
+@EmployeeDateCheck
 @Table(name = "employees")
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String lastName;
+    @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String firstName;
+    @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String patronymic;
     @Enumerated(EnumType.STRING)
@@ -23,19 +30,19 @@ public class Employee {
     private  Sex gender;
     @Column
     private LocalDate birthDate;
+    @Pattern(regexp = "^[0-9\\-+()]+")
     @Column
     private String phone;
     @Email
     @Column
     private String email;
-    // TODO: Нуэна ли генерация даты создания или устройства на работу
     @Column(name = "employment_date")
     private LocalDate employmentDate;
     @Column(name = "fired_date")
     private LocalDate firedDate;
     @Enumerated(EnumType.STRING)
     @Column
-    private JobTitles jobTitle;
+    private JobTitle jobTitle;
     @Column
     private BigDecimal salary;
     @Column
@@ -126,11 +133,11 @@ public class Employee {
         this.firedDate = firedDate;
     }
 
-    public JobTitles getJobTitle() {
+    public JobTitle getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(JobTitles jobTitle) {
+    public void setJobTitle(JobTitle jobTitle) {
         this.jobTitle = jobTitle;
     }
 

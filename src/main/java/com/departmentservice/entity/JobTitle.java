@@ -1,6 +1,6 @@
 package com.departmentservice.entity;
 
-public enum JobTitles {
+public enum JobTitle {
     BOSS,
     COMMON,
     NONE
