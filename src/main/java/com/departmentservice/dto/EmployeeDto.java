@@ -19,13 +19,14 @@ public class EmployeeDto {
     private BigDecimal salary;
     private Boolean isBoss;
     private String departmentTitle;
+    private Long departmentId;
 
     public EmployeeDto() {
     }
 
     public EmployeeDto(String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
                        String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitle jobTitle,
-                       BigDecimal salary, Boolean isBoss, DepartmentDto department) {
+                       BigDecimal salary, Boolean isBoss) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
@@ -38,6 +39,14 @@ public class EmployeeDto {
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.isBoss = isBoss;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getLastName() {
@@ -136,11 +145,11 @@ public class EmployeeDto {
         isBoss = boss;
     }
 
-    public String getDepartment() {
+    public String getDepartmentTitle() {
         return departmentTitle;
     }
 
-    public void setDepartment(String departmentTitle) {
+    public void setDepartmentTitle(String departmentTitle) {
         this.departmentTitle = departmentTitle;
     }
 

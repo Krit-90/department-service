@@ -7,9 +7,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
-// TODO: Не реагирует на это ограничение
-@EmployeeDateCheck
 @Table(name = "employees")
 @Entity
 public class Employee {
@@ -59,6 +58,14 @@ public class Employee {
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.gender = gender;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLastName() {
@@ -191,7 +198,7 @@ public class Employee {
         if (getJobTitle() != employee.getJobTitle()) return false;
         if (getSalary() != null ? !getSalary().equals(employee.getSalary()) : employee.getSalary() != null)
             return false;
-        if (isBoss != null ? !isBoss.equals(employee.isBoss) : employee.isBoss != null) return false;
+        if (!Objects.equals(isBoss, employee.isBoss)) return false;
         return getDepartment() != null ? getDepartment().equals(employee.getDepartment()) : employee.getDepartment() == null;
     }
 

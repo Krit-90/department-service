@@ -14,7 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByLastNameAndFirstName(String lastName, String firstName);
 
     List<Employee> findByDepartmentId(Long departmentId);
-
     @Query(value = "Select * From employees Where is_boss = true and department_id = ?", nativeQuery = true)
     Employee getBoss(Long id);
 

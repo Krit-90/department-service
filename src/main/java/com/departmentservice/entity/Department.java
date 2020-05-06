@@ -71,7 +71,7 @@ public class Department {
         this.headDepartment = headDepartment;
     }
 
-    public Set<Department> getSubDepartment() {
+    public Set<Department> getSubDepartments() {
         return subDepartment;
     }
 

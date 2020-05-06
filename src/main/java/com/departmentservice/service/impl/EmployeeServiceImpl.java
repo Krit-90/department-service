@@ -2,10 +2,12 @@ package com.departmentservice.service.impl;
 
 import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Employee;
+import com.departmentservice.exception.NoSuchElementInDBException;
+import com.departmentservice.exception.ValidationException;
 import com.departmentservice.repository.DepartmentRepository;
 import com.departmentservice.repository.EmployeeRepository;
 import com.departmentservice.service.EmployeeService;
-import com.departmentservice.util.MapperEntity;
+import com.departmentservice.util.MapperEmployee;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,22 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Transactional
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final MapperEntity mapperEntity;
+    private final MapperEmployee mapperEmployee;
     private final DepartmentRepository departmentRepository;
 
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, MapperEntity mapperEntity,
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, MapperEmployee mapperEmployee,
                                DepartmentRepository departmentRepository) {
         this.employeeRepository = employeeRepository;
-        this.mapperEntity = Mappers.getMapper(MapperEntity.class);
+        this.mapperEmployee = Mappers.getMapper(MapperEmployee.class);
         this.departmentRepository = departmentRepository;
     }
 
@@ -37,10 +38,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    // TODO: Получилось что то монструозное, думал и искал, но не понял как сделать это проще
     @Override
     public Employee updateEmployee(Long id, EmployeeDto employeeDto) {
-        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Работник не найден"));
+        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         Employee employee = employeeRepository.findById(id).get();
         if (employeeDto.getFirstName() != null) {
             employee.setFirstName(employeeDto.getFirstName());
@@ -55,6 +55,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setEmail(employeeDto.getEmail());
         }
         if (employeeDto.getBirthDate() != null) {
+            if (employee.getEmploymentDate().isBefore(employee.getBirthDate())) {
+                throw new ValidationException("Дата приема на работу, должна бы ть после дня рождения");
+            }
             employee.setBirthDate(employeeDto.getBirthDate());
         }
         if (employeeDto.getPhone() != null) {
@@ -70,6 +73,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setGender(employeeDto.getGender());
         }
         if (employeeDto.getEmploymentDate() != null) {
+            if (employee.getEmploymentDate().isBefore(employee.getBirthDate())) {
+                throw new ValidationException("Дата приема на работу, должна быть после дня рождения");
+            }
             employee.setEmploymentDate(employeeDto.getEmploymentDate());
         }
         return employeeRepository.save(employee);
@@ -77,30 +83,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void removeEmployee(Long id) {
-        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Работник не найден"));
+        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         employeeRepository.deleteById(id);
     }
 
     @Override
     public Employee firedEmployee(Long id, LocalDate firedDate) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Работник не найден"));
+                .orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
+        if (employee.getEmploymentDate().isAfter(firedDate)) {
+            throw new ValidationException("Дата увольнения, должна быть после приема на работу");
+        }
         employee.setFiredDate(firedDate);
         return employeeRepository.save(employee);
     }
 
     @Override
     public EmployeeDto getEmployeeInfoById(Long id) {
-        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Работник не найден"));
-        return mapperEntity.employeeToDto(employeeRepository.findById(id).get());
+        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
+        return mapperEmployee.employeeToDto(employeeRepository.findById(id).get());
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public Employee changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId) {
-        employeeRepository.findById(employeeId).orElseThrow(() -> new NoSuchElementException("Работник не найден"));
+        employeeRepository.findById(employeeId).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         employeeRepository.findById(newDepartmentId)
-                .orElseThrow(() -> new NoSuchElementException("Работник не найден"));
+                .orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         employeeRepository.setDepartmentIdOfEmployee(newDepartmentId, employeeId);
         return employeeRepository.findById(employeeId).get();
     }
@@ -108,16 +117,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void changeDepartmentOfAllEmployeeFromSame(Long oldDepartmentId, Long newDepartmentId) {
         departmentRepository.findById(oldDepartmentId)
-                .orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+                .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         departmentRepository.findById(newDepartmentId)
-                .orElseThrow(() -> new NoSuchElementException("Департамент не найден"));
+                .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
             employeeRepository.setDepartmentIdOfAllEmployeesFromSameDepartment(oldDepartmentId, newDepartmentId);
     }
 
     @Override
     public EmployeeDto getBossOfEmployee(Long id) {
-        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Работник не найден"));
-        return mapperEntity.employeeToDto(employeeRepository.getBossOfEmployee(id));
+        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
+        return mapperEmployee.employeeToDto(employeeRepository.getBossOfEmployee(id));
     }
 
     @Override
