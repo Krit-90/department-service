@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+// TODO: Не реагирует на это ограничение
+@EmployeeDateCheck
 @Table(name = "employees")
 @Entity
 public class Employee {
