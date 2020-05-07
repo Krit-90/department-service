@@ -38,6 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    //TODO: здесь нам нужно возвращать дто, или целого employee
     @Override
     public Employee updateEmployee(Long id, EmployeeDto employeeDto) {
         employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
@@ -63,11 +64,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeDto.getPhone() != null) {
             employee.setPhone(employeeDto.getPhone());
         }
-        if (employeeDto.getSalary() != null) {
-            employee.setSalary(employeeDto.getSalary());
+        if (employeeRepository.getCountBossOfDepartment(id) > 0) {
+            throw new ValidationException("Может быть лишь один руководитель");
+        } else {
+            employee.setBoss(employeeDto.getBoss());
         }
         if (employeeDto.getJobTitle() != null) {
             employee.setJobTitle(employeeDto.getJobTitle());
+        }
+        //TODO: В каких случаях использовать if/else, а в каких просто if
+        if (employeeDto.getSalary() != null) {
+            if (!employee.getBoss() & employeeDto.getSalary().compareTo(
+                    employeeRepository.getBossOfEmployee(id).getSalary()) == 1) {
+                throw new ValidationException("Зарплата не может быть больше, чем у руководителя");
+            }
+            employee.setSalary(employeeDto.getSalary());
         }
         if (employeeDto.getGender() != null) {
             employee.setGender(employeeDto.getGender());
@@ -120,7 +131,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         departmentRepository.findById(newDepartmentId)
                 .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
-            employeeRepository.setDepartmentIdOfAllEmployeesFromSameDepartment(oldDepartmentId, newDepartmentId);
+        employeeRepository.setDepartmentIdOfAllEmployeesFromSameDepartment(oldDepartmentId, newDepartmentId);
     }
 
     @Override

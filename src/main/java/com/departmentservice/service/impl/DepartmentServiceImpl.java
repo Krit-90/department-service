@@ -41,9 +41,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department addDepartment(Department department, String title) {
-        if (departmentRepository.findByTitle(title) == null &
+        if (departmentRepository.findByTitle(title) == null |
                 departmentRepository.getCountOfDepartmentsWhereHeadIsNull() > 1) {
-            throw new ValidationException();
+            throw new ValidationException("Вышестоящий департамент не найден или самый верхний уже существует");
         }
         department.setCreationDate(LocalDate.now());
         department.setHeadDepartment(departmentRepository.findByTitle(title));

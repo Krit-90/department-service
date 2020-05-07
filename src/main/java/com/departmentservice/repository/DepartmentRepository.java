@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -19,7 +18,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Query(value = "Update departments Set head_department_id = ? Where id = ?", nativeQuery = true)
     void changeHeadDepartment(Long idCurrent, Long idNewHead);
 
-    @Query(value = "Select count(id) From departments Where head_department_id is null",
-            nativeQuery = true)
+    @Query(value = "Select count(id) From departments Where head_department_id is null", nativeQuery = true)
     int getCountOfDepartmentsWhereHeadIsNull();
 }

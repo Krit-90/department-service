@@ -4,6 +4,7 @@ package com.departmentservice.dto;
 import java.time.LocalDate;
 
 public class DepartmentDto {
+    private Long id;
     private String title;
     private LocalDate creationDate;
     private EmployeeDto boss;
@@ -12,7 +13,8 @@ public class DepartmentDto {
     public DepartmentDto() {
     }
 
-    public DepartmentDto(String title, LocalDate creationDate, EmployeeDto boss, Integer countEmployee) {
+    public DepartmentDto(Long id, String title, LocalDate creationDate, EmployeeDto boss, Integer countEmployee) {
+        this.id = id;
         this.title = title;
         this.creationDate = creationDate;
         this.boss = boss;
@@ -21,6 +23,14 @@ public class DepartmentDto {
 
     public DepartmentDto(String title) {
         this.title = title;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {

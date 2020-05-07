@@ -14,6 +14,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByLastNameAndFirstName(String lastName, String firstName);
 
     List<Employee> findByDepartmentId(Long departmentId);
+
     @Query(value = "Select * From employees Where is_boss = true and department_id = ?", nativeQuery = true)
     Employee getBoss(Long id);
 
@@ -34,4 +35,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(value = "Select * From employees Where is_boss = true and department_id = " +
             "(Select department_id From employees Where id = ?)", nativeQuery = true)
     Employee getBossOfEmployee(Long id);
+
+    @Query(value = "Select count(id) From employees Where is_boss = true and department_id = " +
+            "(Select department_id From employees Where id = ?)", nativeQuery = true)
+    int getCountBossOfDepartment(Long id);
 }

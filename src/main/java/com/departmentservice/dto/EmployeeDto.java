@@ -2,10 +2,12 @@ package com.departmentservice.dto;
 
 import com.departmentservice.entity.JobTitle;
 import com.departmentservice.entity.Sex;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class EmployeeDto {
+    private Long id;
     private String lastName;
     private String firstName;
     private String patronymic;
@@ -24,9 +26,10 @@ public class EmployeeDto {
     public EmployeeDto() {
     }
 
-    public EmployeeDto(String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
+    public EmployeeDto(Long id, String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
                        String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitle jobTitle,
                        BigDecimal salary, Boolean isBoss) {
+        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
@@ -39,6 +42,33 @@ public class EmployeeDto {
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.isBoss = isBoss;
+    }
+
+    public EmployeeDto(String lastName, String firstName, String patronymic, Sex gender, LocalDate birthDate,
+                       String phone, String email, LocalDate employmentDate, LocalDate firedDate, JobTitle jobTitle,
+                       BigDecimal salary, Boolean isBoss, String departmentTitle, Long departmentId) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.patronymic = patronymic;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.phone = phone;
+        this.email = email;
+        this.employmentDate = employmentDate;
+        this.firedDate = firedDate;
+        this.jobTitle = jobTitle;
+        this.salary = salary;
+        this.isBoss = isBoss;
+        this.departmentTitle = departmentTitle;
+        this.departmentId = departmentId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getDepartmentId() {
@@ -152,6 +182,7 @@ public class EmployeeDto {
     public void setDepartmentTitle(String departmentTitle) {
         this.departmentTitle = departmentTitle;
     }
+
 
     @Override
     public String toString() {

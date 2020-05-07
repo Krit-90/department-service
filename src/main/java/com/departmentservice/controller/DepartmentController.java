@@ -3,7 +3,6 @@ package com.departmentservice.controller;
 import com.departmentservice.dto.DepartmentDto;
 import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Department;
-import com.departmentservice.repository.DepartmentRepository;
 import com.departmentservice.service.DepartmentService;
 import com.departmentservice.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ public class DepartmentController {
     EmployeeService employeeService;
     @Autowired
     DepartmentService departmentService;
-    @Autowired
-    DepartmentRepository departmentRepository;
 
     @GetMapping("/")
     public EmployeeDto testGet() {
