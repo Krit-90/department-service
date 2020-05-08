@@ -33,14 +33,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.departmentRepository = departmentRepository;
     }
 
-    public Employee addEmployee(Employee employee) {
+    public EmployeeDto addEmployee(EmployeeDto employeeDto) {
+        Employee employee = mapperEmployee.DtoToEmployee(employeeDto);
         employee.setEmploymentDate(LocalDate.now());
-        return employeeRepository.save(employee);
+        employeeDto = mapperEmployee.employeeToDto(employeeRepository.save(employee));
+        return employeeDto;
     }
 
-    //TODO: здесь нам нужно возвращать дто, или целого employee
     @Override
-    public Employee updateEmployee(Long id, EmployeeDto employeeDto) {
+    public EmployeeDto updateEmployee(Long id, EmployeeDto employeeDto) {
         employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         Employee employee = employeeRepository.findById(id).get();
         if (employeeDto.getFirstName() != null) {
@@ -64,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeDto.getPhone() != null) {
             employee.setPhone(employeeDto.getPhone());
         }
-        if (employeeRepository.getCountBossOfDepartment(id) > 0) {
+        if (employeeRepository.countBossOfDepartment(id) > 0) {
             throw new ValidationException("Может быть лишь один руководитель");
         } else {
             employee.setBoss(employeeDto.getBoss());
@@ -72,10 +73,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeDto.getJobTitle() != null) {
             employee.setJobTitle(employeeDto.getJobTitle());
         }
-        //TODO: В каких случаях использовать if/else, а в каких просто if
         if (employeeDto.getSalary() != null) {
             if (!employee.getBoss() & employeeDto.getSalary().compareTo(
-                    employeeRepository.getBossOfEmployee(id).getSalary()) == 1) {
+                    employeeRepository.getBossOfEmployee(id).getSalary()) > 0) {
                 throw new ValidationException("Зарплата не может быть больше, чем у руководителя");
             }
             employee.setSalary(employeeDto.getSalary());
@@ -89,12 +89,15 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
             employee.setEmploymentDate(employeeDto.getEmploymentDate());
         }
-        return employeeRepository.save(employee);
+        employeeDto = mapperEmployee.employeeToDto(employeeRepository.save(employee));
+        return employeeDto;
     }
 
     @Override
     public void removeEmployee(Long id) {
-        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
+        if(employeeRepository.findById(id).orElse(null) == null) {
+            return;
+        }
         employeeRepository.deleteById(id);
     }
 
@@ -115,7 +118,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return mapperEmployee.employeeToDto(employeeRepository.findById(id).get());
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public Employee changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId) {
         employeeRepository.findById(employeeId).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));

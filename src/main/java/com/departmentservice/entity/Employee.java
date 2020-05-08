@@ -1,49 +1,55 @@
 package com.departmentservice.entity;
 
-import com.departmentservice.util.EmployeeDateCheck;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-// TODO: Не реагирует на это ограничение
-@EmployeeDateCheck
 @Table(name = "employees")
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String lastName;
+    @NotNull
     @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String firstName;
     @Pattern(regexp = "^[а-яА-Я\\-]+")
     @Column
     private String patronymic;
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column
     private  Sex gender;
+    @NotNull
     @Column
     private LocalDate birthDate;
+    @NotNull
     @Pattern(regexp = "^[0-9\\-+()]+")
     @Column
     private String phone;
+    @NotNull
     @Email
     @Column
     private String email;
+    @NotNull
     @Column(name = "employment_date")
     private LocalDate employmentDate;
     @Column(name = "fired_date")
     private LocalDate firedDate;
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column
     private JobTitle jobTitle;
+    @NotNull
     @Column
     private BigDecimal salary;
     @Column

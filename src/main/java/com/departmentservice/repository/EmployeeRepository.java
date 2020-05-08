@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,30 +14,24 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByLastNameAndFirstName(String lastName, String firstName);
 
-    List<Employee> findByDepartmentId(Long departmentId);
-
-    @Query(value = "Select * From employees Where is_boss = true and department_id = ?", nativeQuery = true)
-    Employee getBoss(Long id);
-
-    @Query(value = "Select count(id) From employees Where department_id = ?", nativeQuery = true)
-    int getCountOfEmployeesInDepartment(Long departmentId);
-
-    @Query(value = "Select sum(salary) From employees Where department_id = ?", nativeQuery = true)
-    BigDecimal getSumOfSalaryInDepartment(Long departmentId);
+    @Query(value = "Select Sum(e.salary) From Employee e Where e.department.id = :departmentId")
+    BigDecimal sumSalaryInDepartment(@RequestParam("id") Long departmentId);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "Update employees Set department_id = ? Where id = ?", nativeQuery = true)
-    void setDepartmentIdOfEmployee(Long departmentId, Long employeeId);
+    @Query(value = "Update Employee e Set e.department.id = :departmentId Where e.id = :employeeId")
+    void setDepartmentIdOfEmployee(@RequestParam("departmentId") Long departmentId,
+                                   @RequestParam("employeeId") Long employeeId);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "Update employees Set department_id = ? Where department_id = ?", nativeQuery = true)
-    void setDepartmentIdOfAllEmployeesFromSameDepartment(Long oldDepartmentId, Long newDepartmentId);
+    @Query(value = "Update Employee e Set e.department.id = :newDepartmentId Where e.department.id = :oldDepartmentId")
+    void setDepartmentIdOfAllEmployeesFromSameDepartment(@RequestParam("oldDepartmentId") Long oldDepartmentId,
+                                                         @RequestParam("newDepartmentId") Long newDepartmentId);
 
-    @Query(value = "Select * From employees Where is_boss = true and department_id = " +
-            "(Select department_id From employees Where id = ?)", nativeQuery = true)
-    Employee getBossOfEmployee(Long id);
+    @Query(value = "Select b From Employee b Where b.isBoss = true and b.department.id = " +
+            "(Select e.department.id From Employee e Where e.id = :id)")
+    Employee getBossOfEmployee(@RequestParam("id") Long id);
 
-    @Query(value = "Select count(id) From employees Where is_boss = true and department_id = " +
-            "(Select department_id From employees Where id = ?)", nativeQuery = true)
-    int getCountBossOfDepartment(Long id);
+    @Query(value = "Select count(b.id) From Employee b Where b.isBoss = true and b.department.id = " +
+            "(Select e.department.id From Employee e Where e.id = :id)")
+    int countBossOfDepartment(@RequestParam("id") Long id);
 }

@@ -3,6 +3,7 @@ package com.departmentservice.service;
 import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Employee;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,26 +11,27 @@ public interface EmployeeService {
     /**
      * Добавление сотрудника
      *
-     * @param employee Новый сотрудник
-     * @return Добавленый сотрудник
+     * @param employeeDto Данные о новом сотруднике
+     * @return Дто добавленного сотрудника
      */
-    Employee addEmployee(Employee employee);
+    EmployeeDto addEmployee(@NotNull(message = "Данные о работнике не найдены")EmployeeDto employeeDto);
 
     /**
      * Редактирование сведений о сотруднике департамента
      *
      * @param id          Id искомого сотрудника
      * @param employeeDto Дто сотрудника из которого берем сведения
-     * @return Отредактированный сотрудник
+     * @return Данные отредактированного сотрудника
      */
-    Employee updateEmployee(Long id, EmployeeDto employeeDto);
+    EmployeeDto updateEmployee(@NotNull(message = "Id не найден") Long id,
+                            @NotNull(message = "Данные о работнике не найдены") EmployeeDto employeeDto);
 
     /**
      * Удаление из базы
      *
      * @param id Id искомго сотрудкника
      */
-    void removeEmployee(Long id);
+    void removeEmployee(@NotNull(message = "Id не найден") Long id);
 
     /**
      * Увольнение сотрудника
@@ -38,7 +40,8 @@ public interface EmployeeService {
      * @param firedDate Дата увольнения
      * @return Уволенный сотрудник
      */
-    Employee firedEmployee(Long id, LocalDate firedDate);
+    Employee firedEmployee(@NotNull(message = "Id не найден") Long id,
+                           @NotNull(message = "Дата не найдена") LocalDate firedDate);
 
     /**
      * Получение информации о сотруднике
@@ -46,7 +49,7 @@ public interface EmployeeService {
      * @param id Id искомого сотрудника
      * @return Дто искомого сотрудника
      */
-    EmployeeDto getEmployeeInfoById(Long id);
+    EmployeeDto getEmployeeInfoById(@NotNull(message = "Id не найден") Long id);
 
     /**
      * Перевод сотрудника из одного департамента в другой
@@ -55,7 +58,8 @@ public interface EmployeeService {
      * @param newDepartmentId Id нового департамента
      * @return Переведенный работник
      */
-    Employee changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId);
+    Employee changeDepartmentOfEmployee(@NotNull(message = "Id не найден") Long employeeId,
+                                        @NotNull(message = "Id не найден") Long newDepartmentId);
 
     /**
      * Перевод всех сотрудников департамента в другой департамент
@@ -63,7 +67,8 @@ public interface EmployeeService {
      * @param oldDepartmentId Id текущего департамент
      * @param newDepartmentId Id департамента, в который хотим перевести
      */
-    void changeDepartmentOfAllEmployeeFromSame(Long oldDepartmentId, Long newDepartmentId);
+    void changeDepartmentOfAllEmployeeFromSame(@NotNull(message = "Id не найден") Long oldDepartmentId,
+                                               @NotNull(message = "Id не найден") Long newDepartmentId);
 
     /**
      * Получение информации о руководителе данного сотрудника
@@ -71,13 +76,16 @@ public interface EmployeeService {
      * @param id Id искомого сотрудника
      * @return Дто руководителя искомого сотрудника
      */
-    EmployeeDto getBossOfEmployee(Long id);
+    EmployeeDto getBossOfEmployee(@NotNull(message = "Id не найден") Long id);
 
-    /** Получение списка сотрудников департамента по фамилии и имени
-     * @param lastName Фамилия искомого сотрудника
+    /**
+     * Получение списка сотрудников департамента по фамилии и имени
+     *
+     * @param lastName  Фамилия искомого сотрудника
      * @param firstName Имя искомого сотрудника
      * @return Список сотрудников с искомыми фамилией и именем
      */
-    List<Employee> getEmployeesByLastNameAndFirstName(String lastName, String firstName);
+    List<Employee> getEmployeesByLastNameAndFirstName(@NotNull(message = "Фамилия не найдено") String lastName,
+                                                      @NotNull(message = "Имя не найдено") String firstName);
 
 }

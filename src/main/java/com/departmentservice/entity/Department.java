@@ -1,6 +1,7 @@
 package com.departmentservice.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -10,8 +11,10 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     @Column
     private String title;
+    @NotNull
     @Column
     private LocalDate creationDate;
     @OneToMany(mappedBy = "department")
@@ -71,12 +74,25 @@ public class Department {
         this.headDepartment = headDepartment;
     }
 
-    public Set<Department> getSubDepartments() {
+    public Set<Department> getSubDepartment() {
         return subDepartment;
     }
 
     public void setSubDepartment(Set<Department> subDepartment) {
         this.subDepartment = subDepartment;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Department{");
+        sb.append("id=").append(id);
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", creationDate=").append(creationDate);
+        sb.append(", employees=").append(employees);
+        sb.append(", subDepartment=").append(subDepartment);
+        sb.append(", headDepartment=").append(headDepartment);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -86,22 +102,15 @@ public class Department {
 
         Department that = (Department) o;
 
-        if (!id.equals(that.id)) return false;
-        if (getTitle() != null ? !getTitle().equals(that.getTitle()) : that.getTitle() != null) return false;
-        if (getCreationDate() != null ? !getCreationDate().equals(that.getCreationDate()) : that.getCreationDate() != null)
-            return false;
-        if (getEmployees() != null ? !getEmployees().equals(that.getEmployees()) : that.getEmployees() != null)
-            return false;
-        return getHeadDepartment() != null ? getHeadDepartment().equals(that.getHeadDepartment()) : that.getHeadDepartment() == null;
+        if (!getId().equals(that.getId())) return false;
+        return getTitle().equals(that.getTitle());
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (getCreationDate() != null ? getCreationDate().hashCode() : 0);
-        result = 31 * result + (getEmployees() != null ? getEmployees().hashCode() : 0);
-        result = 31 * result + (getHeadDepartment() != null ? getHeadDepartment().hashCode() : 0);
+        int result = getId().hashCode();
+        result = 31 * result + getTitle().hashCode();
         return result;
     }
+
 }
