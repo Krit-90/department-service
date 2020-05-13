@@ -11,6 +11,7 @@ import com.departmentservice.repository.EmployeeRepository;
 import com.departmentservice.service.DepartmentService;
 import com.departmentservice.util.MapperDepartment;
 import com.departmentservice.util.MapperEmployee;
+import lombok.NonNull;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDtoReceive addDepartment(DepartmentDtoReceive departmentDto) {
-        if (departmentRepository.findById(departmentDto.getHeadId()).isEmpty() &&
+    public DepartmentDtoReceive addDepartment(@NonNull DepartmentDtoReceive departmentDtoReceive) {
+        if (departmentRepository.findById(departmentDtoReceive.getHeadId()).isEmpty() &&
                 departmentRepository.countByHeadDepartmentIsNull() > 0) {
             throw new NoSuchElementInDBException("Вышестоящий департамент не найден" +
                     " или самый верхний уже существует");
@@ -47,15 +48,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         //TODO: Если при добавлении будет еще и id, то случайно может проапдейтить уже существующий департамент в бд;
         // вышестоящий департамент без обращения в репозиторий не замапить, стоит ли создавать новый метод по типу
         // enrichDepartmentDto(Department department) ради этого?
-        Department department = mapperDepartment.DtoReceiveToDepartment(departmentDto);
+        Department department = mapperDepartment.DtoReceiveToDepartment(departmentDtoReceive);
         department.setCreationDate(LocalDate.now());
-        department.setHeadDepartment(departmentRepository.findById(departmentDto.getHeadId()).get());
+        department.setHeadDepartment(departmentRepository.findById(departmentDtoReceive.getHeadId()).get());
         departmentRepository.save(department);
         return mapperDepartment.departmentToDtoReceive(department);
     }
 
     @Override
-    public Department updateDepartmentTitle(String newTitle, Long id) {
+    public Department updateDepartmentTitle(String newTitle, @NonNull Long id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         department.setTitle(newTitle);
@@ -71,13 +72,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto getDepartmentInfoById(Long id) {
+    public DepartmentDto getDepartmentInfoById(@NonNull Long id) {
         return enrichDepartmentDto(departmentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден")));
     }
 
     @Override
-    public Department changeHeadDepartment(Long idNewHead, Long idCurrent) {
+    public Department changeHeadDepartment(@NonNull Long idNewHead, @NonNull Long idCurrent) {
         if (idCurrent.equals(idNewHead)) {
             throw new ValidationException("Департамент не может быть главныи для самого себя");
         }
@@ -90,13 +91,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department getDepartmentByTitle(String title) {
+    public Department getDepartmentByTitle(@NonNull String title) {
         return departmentRepository.findByTitle(title).
                 orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
     }
 
     @Override
-    public List<DepartmentDto> getAllHigherDepartments(Long id) {
+    public List<DepartmentDto> getAllHigherDepartments(@NonNull Long id) {
         List<DepartmentDto> higherDepartments = new ArrayList<>();
         Department current = departmentRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementInDBException("Дапартамент не найден"));
@@ -108,9 +109,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         return higherDepartments;
     }
 
-    //TODO: StackOverFlow и хоть убей, и в здесь и в просто подчиненных департаментах
     @Override
-    public List<DepartmentDto> getAllSubordinateDepartments(Long id) {
+    public List<DepartmentDto> getAllSubordinateDepartments(@NonNull Long id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementInDBException("Дапартамент не найден"));
         List<Department> subDepartments = new ArrayList<>();
@@ -124,7 +124,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<DepartmentDto> getSubordinateDepartments(Long id) {
+    public List<DepartmentDto> getSubordinateDepartments(@NonNull Long id) {
         departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         List<DepartmentDto> departmentsDtoList = new ArrayList<>();
         departmentRepository.findById(id).get().getSubDepartment().
@@ -132,17 +132,17 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentsDtoList;
     }
 
-    //    TODO: Разве нормально, если мы будем добавлять такой метод в EmployeeService, в котором это логика и не нужна,
-//     и задействоваться он там и не будет. У нас в EmployeeService тоже сторонний репозиторий от департаментов есть,
-//     только для одной строчки
+    //    TODO Разве нормально, если мы будем добавлять такой метод в EmployeeService, в котором это логика и не нужна,
+    //     и задействоваться он там и не будет. У нас в EmployeeService тоже сторонний репозиторий от департаментов есть,
+    //     только для одной строчки
     @Override
-    public BigDecimal getSumOfSalary(Long id) {
+    public BigDecimal getSumOfSalary(@NonNull Long id) {
         departmentRepository.findById(id).orElseThrow();
         return employeeRepository.sumSalaryInDepartment(id);
     }
 
     @Override
-    public List<EmployeeDto> getEmployeesOfDepartment(Long id) {
+    public List<EmployeeDto> getEmployeesOfDepartment(@NonNull Long id) {
         departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         List<EmployeeDto> employeesDtoList = new ArrayList<>();
         employeeRepository.findByDepartmentId(id).
@@ -158,21 +158,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentDto;
     }
 
-
-/*    private Set<Department> getTreeOfDepartments(Department rootDepartment, Set<Department> destinationDepartmentsSet) {
-        Set<Department> subDepartments = new HashSet<>();
-        Iterator<Department> iterator = rootDepartment.getSubDepartments().iterator();
-        while (iterator.hasNext()) {
-            Department department = iterator.next();
-            subDepartments.add(department);
-            getTreeOfDepartments(department, subDepartments);
-        }
-        if (!destinationDepartmentsSet.isEmpty()) {
-            return null;
-        }
-        destinationDepartmentsSet.addAll(subDepartments);
-        return destinationDepartmentsSet;
-    }*/
 
     private class DepartmentIterator implements Iterator<Department> {
         Department nextDepartment;

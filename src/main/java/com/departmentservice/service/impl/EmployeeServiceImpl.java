@@ -8,6 +8,7 @@ import com.departmentservice.repository.DepartmentRepository;
 import com.departmentservice.repository.EmployeeRepository;
 import com.departmentservice.service.EmployeeService;
 import com.departmentservice.util.MapperEmployee;
+import lombok.NonNull;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.departmentRepository = departmentRepository;
     }
 
-    public EmployeeDto addEmployee(EmployeeDto employeeDto) {
+    public EmployeeDto addEmployee(@NonNull EmployeeDto employeeDto) {
         Employee employee = mapperEmployee.DtoToEmployee(employeeDto);
         employee.setEmploymentDate(LocalDate.now());
         employeeDto = mapperEmployee.employeeToDto(employeeRepository.save(employee));
@@ -41,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto updateEmployee(Long id, EmployeeDto employeeDto) {
+    public EmployeeDto updateEmployee(@NonNull Long id, @NonNull EmployeeDto employeeDto) {
         employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         Employee employee = employeeRepository.findById(id).get();
         if (employeeDto.getFirstName() != null) {
@@ -94,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void removeEmployee(Long id) {
+    public void removeEmployee(@NonNull Long id) {
         if(employeeRepository.findById(id).orElse(null) == null) {
             return;
         }
@@ -102,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee firedEmployee(Long id, LocalDate firedDate) {
+    public Employee firedEmployee(@NonNull Long id, @NonNull LocalDate firedDate) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         if (employee.getEmploymentDate().isAfter(firedDate)) {
@@ -113,13 +114,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getEmployeeInfoById(Long id) {
+    public EmployeeDto getEmployeeInfoById(@NonNull Long id) {
         employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         return mapperEmployee.employeeToDto(employeeRepository.findById(id).get());
     }
 
     @Override
-    public Employee changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId) {
+    public Employee changeDepartmentOfEmployee(@NonNull Long employeeId, @NonNull Long newDepartmentId) {
         employeeRepository.findById(employeeId).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         employeeRepository.findById(newDepartmentId)
                 .orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
@@ -128,7 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void changeDepartmentOfAllEmployeeFromSame(Long oldDepartmentId, Long newDepartmentId) {
+    public void changeDepartmentOfAllEmployeeFromSame(@NonNull Long oldDepartmentId, @NonNull Long newDepartmentId) {
         departmentRepository.findById(oldDepartmentId)
                 .orElseThrow(() -> new NoSuchElementInDBException("Департамент не найден"));
         departmentRepository.findById(newDepartmentId)
@@ -137,13 +138,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getBossOfEmployee(Long id) {
+    public EmployeeDto getBossOfEmployee(@NonNull Long id) {
         employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementInDBException("Работник не найден"));
         return mapperEmployee.employeeToDto(employeeRepository.getBossOfEmployee(id));
     }
 
     @Override
-    public List<Employee> getEmployeesByLastNameAndFirstName(String lastName, String firstName) {
+    public List<Employee> getEmployeesByLastNameAndFirstName(@NonNull String lastName, @NonNull String firstName) {
         return employeeRepository.findByLastNameAndFirstName(lastName, firstName);
     }
 }

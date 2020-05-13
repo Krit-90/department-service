@@ -14,6 +14,12 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByLastNameAndFirstName(String lastName, String firstName);
 
+    List<Employee> findByDepartmentId(Long id);
+
+    Employee findByDepartmentIdAndIsBossTrue(Long id);
+
+    int countIdByDepartmentId(Long departmentId);
+
     @Query(value = "Select Sum(e.salary) From Employee e Where e.department.id = :departmentId")
     BigDecimal sumSalaryInDepartment(@RequestParam("id") Long departmentId);
 

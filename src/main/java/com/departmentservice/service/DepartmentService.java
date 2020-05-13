@@ -5,7 +5,6 @@ import com.departmentservice.dto.DepartmentDtoReceive;
 import com.departmentservice.dto.EmployeeDto;
 import com.departmentservice.entity.Department;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,11 +13,10 @@ public interface DepartmentService {
      * Добавление департамента, при создании необходимо указывать, в какой департамент входит,
      * исключение - главенствующий департамент
      *
-     * @param departmentDto Дто добавляемого департамент с собственным названием и названием вышестоящего
+     * @param departmentDtoReceive Дто добавляемого департамента с собственным названием и названием вышестоящего
      * @return Дто добавленного департамента
      */
-    DepartmentDtoReceive addDepartment(@NotNull(message = "Данные о департаменте не найдены")
-            DepartmentDtoReceive departmentDto);
+    DepartmentDtoReceive addDepartment(DepartmentDtoReceive departmentDtoReceive);
 
     /**
      * Обновление названия департамента
@@ -27,14 +25,14 @@ public interface DepartmentService {
      * @param id       Id искомого департамента
      * @return Измененный департамент
      */
-    Department updateDepartmentTitle(String newTitle, @NotNull(message = "Id не найден") Long id);
+    Department updateDepartmentTitle(String newTitle,Long id);
 
     /**
      * Удаление департамента
      *
      * @param id Id искомого департамента
      */
-    void removeDepartment(@NotNull(message = "Id не найден") Long id);
+    void removeDepartment(Long id);
 
     /**
      * Получение информации о департаменте
@@ -42,7 +40,7 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Дто департамента, содержащий иформацию
      */
-    DepartmentDto getDepartmentInfoById(@NotNull(message = "Id не найден") Long id);
+    DepartmentDto getDepartmentInfoById(Long id);
 
     /**
      * Получение информации о департаментах, находящихся в непосредственном подчинении искомого департамента
@@ -50,7 +48,7 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getSubordinateDepartments(@NotNull(message = "Id не найден") Long id);
+    List<DepartmentDto> getSubordinateDepartments(Long id);
 
     /**
      * Получение информации о ВСЕХ департаментах, находящихся в подчинении искомого департамента
@@ -58,7 +56,7 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getAllSubordinateDepartments(@NotNull(message = "Id не найден") Long id);
+    List<DepartmentDto> getAllSubordinateDepartments(Long id);
 
     /**
      * Смена вышестоящего департамента
@@ -68,8 +66,7 @@ public interface DepartmentService {
      * @return Измененный департамент
      */
 
-    Department changeHeadDepartment(@NotNull(message = "Id не найден") Long idNewHead,
-                                    @NotNull(message = "Id не найден") Long idCurrent);
+    Department changeHeadDepartment(Long idNewHead, Long idCurrent);
 
     /**
      * Получение информации о всех вышестоящих департаментах
@@ -77,7 +74,7 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Список дто департаментов
      */
-    List<DepartmentDto> getAllHigherDepartments(@NotNull(message = "Id не найден") Long id);
+    List<DepartmentDto> getAllHigherDepartments(Long id);
 
     /**
      * Получение департамента по названию
@@ -93,7 +90,7 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Сумма зарплат
      */
-    BigDecimal getSumOfSalary(@NotNull(message = "Id не найден") Long id);
+    BigDecimal getSumOfSalary(Long id);
 
     /**
      * Получение списка работников искомого департамента
@@ -101,6 +98,6 @@ public interface DepartmentService {
      * @param id Id искомого департамента
      * @return Список работников
      */
-    List<EmployeeDto> getEmployeesOfDepartment(@NotNull(message = "Id не найден") Long id);
+    List<EmployeeDto> getEmployeesOfDepartment(Long id);
 
 }
