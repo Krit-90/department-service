@@ -3,7 +3,6 @@ package com.departmentservice.service;
 import com.departmentservice.dto.DepartmentDto;
 import com.departmentservice.dto.DepartmentDtoReceive;
 import com.departmentservice.dto.EmployeeDto;
-import com.departmentservice.entity.Department;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,9 +22,9 @@ public interface DepartmentService {
      *
      * @param newTitle Старое название
      * @param id       Id искомого департамента
-     * @return Измененный департамент
+     * @return Дто искомого департамента
      */
-    Department updateDepartmentTitle(String newTitle,Long id);
+    DepartmentDto updateDepartmentTitle(String newTitle,Long id);
 
     /**
      * Удаление департамента
@@ -63,10 +62,10 @@ public interface DepartmentService {
      *
      * @param idNewHead Id нового департамента
      * @param idCurrent Id искомого департамента
-     * @return Измененный департамент
+     * @return Дто искомого департамента
      */
 
-    Department changeHeadDepartment(Long idNewHead, Long idCurrent);
+    DepartmentDto changeHeadDepartment(Long idNewHead, Long idCurrent);
 
     /**
      * Получение информации о всех вышестоящих департаментах
@@ -80,9 +79,9 @@ public interface DepartmentService {
      * Получение департамента по названию
      *
      * @param title Название искомого департамента
-     * @return Искомый департамент
+     * @return Дто искомого департамента
      */
-    Department getDepartmentByTitle(String title);
+    DepartmentDto getDepartmentByTitle(String title);
 
     /**
      * Получение суммы зарплат работников искомого департамента

@@ -11,14 +11,38 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NoSuchElementInDBException.class)
-    protected ResponseEntity<NoSuchElementInDBException> handleNoSuchElementInDBException(NoSuchElementInDBException ex) {
-        return new ResponseEntity<>(new NoSuchElementInDBException(ex.getLocalizedMessage())
+    protected ResponseEntity<ErrorInfo> handleNoSuchElementInDBException(NoSuchElementInDBException ex) {
+        return new ResponseEntity<>(new ErrorInfo(ex.getLocalizedMessage())
                 , HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ValidationException.class)
-    protected ResponseEntity<ValidationException> handleValidationException(ValidationException ex) {
-        return new ResponseEntity<>(new ValidationException(ex.getLocalizedMessage())
+    protected ResponseEntity<ErrorInfo> handleValidationException(ValidationException ex) {
+        return new ResponseEntity<>(new ErrorInfo(ex.getLocalizedMessage())
                 , HttpStatus.NOT_ACCEPTABLE);
+    }
+    @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity<ErrorInfo> handleNullPointerException(NullPointerException ex) {
+        return new ResponseEntity<>(new ErrorInfo(ex.getLocalizedMessage())
+                , HttpStatus.BAD_REQUEST);
+    }
+
+    private class ErrorInfo {
+        String description;
+
+        public ErrorInfo() {
+        }
+
+        public ErrorInfo(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
     }
 }

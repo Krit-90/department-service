@@ -28,4 +28,4 @@ _configures logback to use file logging and some production settings._
 
 **Example config of server with test data**
 
-`-Dspring.profiles.active=default,test`
+`-Dspring.profiles.active=test`

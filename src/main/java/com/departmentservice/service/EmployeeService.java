@@ -1,7 +1,6 @@
 package com.departmentservice.service;
 
 import com.departmentservice.dto.EmployeeDto;
-import com.departmentservice.entity.Employee;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,7 +37,7 @@ public interface EmployeeService {
      * @param firedDate Дата увольнения
      * @return Уволенный сотрудник
      */
-    Employee firedEmployee(Long id, LocalDate firedDate);
+    EmployeeDto firedEmployee(Long id, LocalDate firedDate);
 
     /**
      * Получение информации о сотруднике
@@ -53,9 +52,9 @@ public interface EmployeeService {
      *
      * @param employeeId      Id искомого сотрудника
      * @param newDepartmentId Id нового департамента
-     * @return Переведенный работник
+     * @return Дто переведенного работника
      */
-    Employee changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId);
+    EmployeeDto changeDepartmentOfEmployee(Long employeeId, Long newDepartmentId);
 
     /**
      * Перевод всех сотрудников департамента в другой департамент
@@ -78,8 +77,8 @@ public interface EmployeeService {
      *
      * @param lastName  Фамилия искомого сотрудника
      * @param firstName Имя искомого сотрудника
-     * @return Список сотрудников с искомыми фамилией и именем
+     * @return Список дто сотрудников с искомыми фамилией и именем
      */
-    List<Employee> getEmployeesByLastNameAndFirstName(String lastName, String firstName);
+    List<EmployeeDto> getEmployeesByLastNameAndFirstName(String lastName, String firstName);
 
 }
